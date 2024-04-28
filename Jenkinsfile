@@ -1,8 +1,8 @@
 pipeline {
     agent none
     parameters {
-        choice(name: 'ACTION', choices: ['present', 'absent'], description: '')
-        string(name: 'Name', defaultValue: 'test', description: '')
+        // choice(name: 'ACTION', choices: ['present', 'absent'], description: '')
+        // string(name: 'Name', defaultValue: 'test', description: '')
     }
     options {
         buildDiscarder(logRotator(numToKeepStr: '10'))
@@ -20,14 +20,19 @@ pipeline {
             }
             steps {
                 sh """
-                mkdir .aws
-                cp AWS_CREDS .aws
-                source .aws/config
-                terraform apply main.tf
+                set -ex
+                mkdir -p ~/.aws
+                cp config ~/.aws/
+                sed -i "s|##ACCESS_KEY_ID##|${AWS_CREDS_USR}|g" ~/.aws/config
+                sed -i "s|##ACCESS_KEY_ID##|${AWS_CREDS_PASS}|g" ~/.aws/config
+                #aws s3 ls
+                terraform init
+                terraform apply -auto-approve
+                #terraform destroy -auto-approve
                 """
             }
             // when {
-            //     branch 'development'
+            //     branch ''
             //     not {
             //         changeRequest()
             //     }
