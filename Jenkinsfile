@@ -8,7 +8,7 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '10'))
         disableConcurrentBuilds()
         timestamps()
-        ansiColor('xterm')
+        // ansiColor('xterm')
     }
     stages {
         stage('EC2 Deploy') {
