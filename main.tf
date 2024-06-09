@@ -1,17 +1,21 @@
 terraform {
   required_providers {
     aws = {
-      source  = "hashicorp/aws"
-      version = "~> 4.18.0"
-      region = "${var.aws_region}"
+      version = ">= 2.7.0"
+      source = "hashicorp/aws"
     }
   }
+}
 
+
+terraform {
   backend "s3" {
-    bucket         	   = "tfstate-files"
-    key              	 = "state/terraform.tfstate"
-    region         	   = "${var.aws_region}"
-    encrypt        	   = true
-    # dynamodb_table = "mycomponents_tf_lockid"
+    bucket = "tfstate-files1"
+    key    = "state/terraform.tfstate"
+    region = "ap-south-1"
+    encrypt = true
+    #Below section can be used if have credential file in default location and have multiple profiles
+    # shared_credentials_file = "~/.aws/credentials"
+    # profile = "default"
   }
 }
